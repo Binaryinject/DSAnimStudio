@@ -624,29 +624,34 @@ namespace DSAnimStudio
 
         private static void DoDrawStep()
         {
-            switch (CurrentStep)
-            {
-                case GFXDrawStep.Opaque:
-                case GFXDrawStep.AlphaEdge:
-                    Scene.Draw();
-                    break;
-                case GFXDrawStep.DbgPrimOverlay:
-                    DBG.DrawPrimitives();
-                    break;
-                case GFXDrawStep.DbgPrimPrepass:
-                    DBG.DrawBehindPrims();
-                    break;
-                case GFXDrawStep.DbgPrimAlwaysRespectDepth:
-                    DBG.DrawDepthRespectPrims();
-                    break;
-                case GFXDrawStep.DbgPrimAlwaysDisrespectDepth:
-                    DBG.DrawDepthDisrespectPrims();
-                    break;
-                case GFXDrawStep.GUI:
-                    DBG.DrawPrimitiveTexts();
-                    if (DBG.EnableMenu)
-                        DbgMenuItem.CurrentMenu.Draw();
-                    break;
+            if (WorldView.screenShotProcess) {
+                Scene.Draw();
+            }
+            else {
+                switch (CurrentStep)
+                {
+                    case GFXDrawStep.Opaque:
+                    case GFXDrawStep.AlphaEdge:
+                        Scene.Draw();
+                        break;
+                    case GFXDrawStep.DbgPrimOverlay:
+                        DBG.DrawPrimitives();
+                        break;
+                    case GFXDrawStep.DbgPrimPrepass:
+                        DBG.DrawBehindPrims();
+                        break;
+                    case GFXDrawStep.DbgPrimAlwaysRespectDepth:
+                        DBG.DrawDepthRespectPrims();
+                        break;
+                    case GFXDrawStep.DbgPrimAlwaysDisrespectDepth:
+                        DBG.DrawDepthDisrespectPrims();
+                        break;
+                    case GFXDrawStep.GUI:
+                        DBG.DrawPrimitiveTexts();
+                        if (DBG.EnableMenu)
+                            DbgMenuItem.CurrentMenu.Draw();
+                        break;
+                }
             }
         }
 
@@ -684,17 +689,21 @@ namespace DSAnimStudio
 
         public static void DrawScene3D()
         {
-            CurrentStep = GFXDrawStep.DbgPrimPrepass;
-            BeginDraw();
-            DoDraw();
+            if (!WorldView.screenShotProcess) {
+                CurrentStep = GFXDrawStep.DbgPrimPrepass;
+                BeginDraw();
+                DoDraw();
+            }
 
             CurrentStep = GFXDrawStep.Opaque;
             BeginDraw();
             DoDraw();
 
-            CurrentStep = GFXDrawStep.AlphaEdge;
-            BeginDraw();
-            DoDraw();
+            if (!WorldView.screenShotProcess) {
+                CurrentStep = GFXDrawStep.AlphaEdge;
+                BeginDraw();
+                DoDraw();
+            }
         }
 
         public static void DrawPrimRespectDepth()

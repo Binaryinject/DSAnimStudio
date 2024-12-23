@@ -45,6 +45,7 @@ namespace DSAnimStudio.ImguiOSD
         public static Window.Toolbox WindowToolbox = new Window.Toolbox();
         public static Window.WorkspaceConfig WindowEntitySettings = new Window.WorkspaceConfig();
         public static Window.WwiseManager WindowWwiseManager = new Window.WwiseManager();
+        public static Window.ScreenShot WindowScreenShot = new Window.ScreenShot();
 
 
         public static Window.EventInspector SpWindowEventInspector = new Window.EventInspector();
@@ -76,6 +77,7 @@ namespace DSAnimStudio.ImguiOSD
             WindowToolbox.Update();
             WindowEntitySettings.Update();
             WindowWwiseManager.Update();
+            WindowScreenShot.Update();
 
 
             SpWindowEventInspector.Update();

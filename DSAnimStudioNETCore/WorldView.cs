@@ -8,10 +8,14 @@ using Newtonsoft.Json;
 using SoulsAssetPipeline.Animation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using ImGuiNET;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace DSAnimStudio
 {
@@ -263,6 +267,31 @@ namespace DSAnimStudio
                 //GFX.SpriteBatchEnd();
             }
         }
+        
+        public static bool screenShotProcess = false;
+        public static string screenShotDir = "";
+        public void UpdateScreenShot() {
+            if (screenShotProcess) {
+                
+                var stream = File.OpenWrite($"{screenShotDir}\\{(int) Main.TAE_EDITOR.PlaybackCursor.GUICurrentFrameMod}.png");
+                Main.SceneRenderTarget.SaveAsPng(stream, Main.SceneRenderTarget.Width, Main.SceneRenderTarget.Height);
+                stream.Dispose();
+                
+                Main.TAE_EDITOR.PlaybackCursor.IsPlaying = false;
+                Main.TAE_EDITOR.PlaybackCursor.IsStepping = true;
+
+                Main.TAE_EDITOR.PlaybackCursor.CurrentTime += Main.TAE_EDITOR.PlaybackCursor.CurrentSnapInterval;
+                Main.TAE_EDITOR.PlaybackCursor.CurrentTime = Math.Floor(Main.TAE_EDITOR.PlaybackCursor.CurrentTime / Main.TAE_EDITOR.PlaybackCursor.CurrentSnapInterval) *
+                                                             Main.TAE_EDITOR.PlaybackCursor.CurrentSnapInterval;
+
+                Main.TAE_EDITOR.Graph.ScrollToPlaybackCursor(1);
+
+                if (Main.TAE_EDITOR.PlaybackCursor.CurrentTime > Main.TAE_EDITOR.PlaybackCursor.MaxTime) {
+                    screenShotProcess = false;
+                }
+            }
+            
+        }
 
         public void Update(float deltaTime)
         {
@@ -428,8 +457,9 @@ namespace DSAnimStudio
             if (DisableAllInput || OSD.Focused || OSD.Hovered || Main.HasUncommittedWindowResize)
                 return;
 
-
-
+            if (Main.Input.KeyUp(Keys.F12)) OSD.WindowScreenShot.IsOpen = true;
+            UpdateScreenShot();
+            
             if (dragType == ViewportDragType.None)
             {
                 if (Main.Input.LeftClickDown)

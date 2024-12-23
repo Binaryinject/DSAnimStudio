@@ -931,7 +931,7 @@ namespace DSAnimStudio
                 //GC.Collect();
 
                 var newSceneRenderTarget = new RenderTarget2D(GFX.Device, TAE_EDITOR.ModelViewerBounds.DpiScaled().Width * ssaa,
-                       TAE_EDITOR.ModelViewerBounds.DpiScaled().Height * ssaa, ssaa > 1, SurfaceFormat.Vector4, DepthFormat.Depth24,
+                       TAE_EDITOR.ModelViewerBounds.DpiScaled().Height * ssaa, ssaa > 1, SurfaceFormat.Color, DepthFormat.Depth24,
                        ssaa > 1 ? 1 : msaa, RenderTargetUsage.DiscardContents);
 
                 RenderTarget2D oldSceneRenderTarget = null;
@@ -1794,7 +1794,7 @@ namespace DSAnimStudio
                         //GFX.Device.SetRenderTarget(SceneRenderTarget);
                         GFX.Device.SetRenderTargets(SceneRenderTarget);
 
-                        GFX.Device.Clear(Colors.MainColorViewportBackground);
+                        GFX.Device.Clear(WorldView.screenShotProcess ? Color.Transparent : Colors.MainColorViewportBackground);
 
                         GFX.Device.Viewport = new Viewport(0, 0, SceneRenderTarget.Width, SceneRenderTarget.Height);
 
@@ -1806,11 +1806,11 @@ namespace DSAnimStudio
                         //(TAE_EDITOR.ModelViewerBounds.Width + (SkyboxRenderTargetPadding * 2)) * GFX.EffectiveSSAA,
                         //(TAE_EDITOR.ModelViewerBounds.Height + (SkyboxRenderTargetPadding * 2)) * GFX.EffectiveSSAA), Color.White);
                         //GFX.SpriteBatchEnd();
-
+                        
                         GFX.Device.Clear(ClearOptions.DepthBuffer, Color.Transparent, 1, 0);
                         //GFX.Device.Clear(ClearOptions.Stencil, Color.Transparent, 1, 0);
                         GFX.BeginDraw();
-                        DBG.DrawSkybox();
+                        if (!WorldView.screenShotProcess) DBG.DrawSkybox();
                         //TaeInterop.TaeViewportDrawPre(gameTime);
                         GFX.DrawScene3D();
 
