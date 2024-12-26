@@ -1807,17 +1807,13 @@ namespace DSAnimStudio
                         //(TAE_EDITOR.ModelViewerBounds.Height + (SkyboxRenderTargetPadding * 2)) * GFX.EffectiveSSAA), Color.White);
                         //GFX.SpriteBatchEnd();
                         
-                        GFX.Device.Clear(ClearOptions.DepthBuffer, Color.Transparent, 1, 0);
+                        //GFX.Device.Clear(ClearOptions.DepthBuffer, Color.Transparent, 1, 0);
                         //GFX.Device.Clear(ClearOptions.Stencil, Color.Transparent, 1, 0);
                         GFX.BeginDraw();
                         if (!WorldView.screenShotProcess) DBG.DrawSkybox();
                         //TaeInterop.TaeViewportDrawPre(gameTime);
                         GFX.DrawScene3D();
-
                         
-
-
-
                         //if (!DBG.DbgPrimXRay)
                         //    GFX.DrawSceneOver3D();
 

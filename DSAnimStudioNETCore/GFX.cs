@@ -625,7 +625,16 @@ namespace DSAnimStudio
         private static void DoDrawStep()
         {
             if (WorldView.screenShotProcess) {
-                Scene.Draw();
+                switch (CurrentStep)
+                {
+                    case GFXDrawStep.Opaque:
+                    case GFXDrawStep.AlphaEdge:
+                        Scene.Draw();
+                        break;
+                    case GFXDrawStep.DbgPrimPrepass:
+                        DBG.DrawBehindPrims();
+                        break;
+                }
             }
             else {
                 switch (CurrentStep)

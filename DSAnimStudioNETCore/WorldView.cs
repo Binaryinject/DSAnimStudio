@@ -270,10 +270,11 @@ namespace DSAnimStudio
         
         public static bool screenShotProcess = false;
         public static string screenShotDir = "";
+        public static string screenShotPrefix = "";
         public void UpdateScreenShot() {
             if (screenShotProcess) {
                 
-                var stream = File.OpenWrite($"{screenShotDir}\\{(int) Main.TAE_EDITOR.PlaybackCursor.GUICurrentFrameMod}.png");
+                var stream = File.OpenWrite($"{screenShotDir}\\{(string.IsNullOrEmpty(screenShotPrefix) ? "" : $"{screenShotPrefix}_")}{(int) Main.TAE_EDITOR.PlaybackCursor.GUICurrentFrameMod}.png");
                 Main.SceneRenderTarget.SaveAsPng(stream, Main.SceneRenderTarget.Width, Main.SceneRenderTarget.Height);
                 stream.Dispose();
                 
